@@ -7,9 +7,12 @@ import (
 func Register() *http.ServeMux {
 	mux := http.NewServeMux()
 	// println("Register called")
-	mux.HandleFunc(
+	mux.Handle(
 		"/ping", Ping())
 
-	mux.HandleFunc("/createTodo", create())
+	mux.Handle("/createTodo", create())
+	mux.Handle("/readAll", readAll())
+	mux.Handle("/readByName", readByName())
+	mux.Handle("/delete", delete())
 	return mux
 }
