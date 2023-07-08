@@ -45,31 +45,31 @@ func ConnectDB() (*sql.DB, error) {
 	db1, err1 := db.Query("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_type = 'BASE TABLE'")
 	if err1 != nil {
 		print("error while querying table")
-	} else {
-		var tableNames []string
-		for db1.Next() {
-			var tableName string
-			err := db1.Scan(&tableName)
-			if err != nil {
-				fmt.Println("Error retrieving table name:", err)
-				continue
-			}
-			tableNames = append(tableNames, tableName)
-		}
-		if len(tableNames) == 0 || !Contains(tableNames, "todo") {
-			fmt.Println("No tables found. creating table Todo")
-			err = CreateTodoTable(db)
-			if err != nil {
-				fmt.Println("Failed to create TODO table:", err)
-				return nil, err
-			}
-		} else {
-			fmt.Println("Table Names:", tableNames)
-		}
-
-		fmt.Println("END###OF###LINE")
-
+		return nil, err1
 	}
+	var tableNames []string
+	for db1.Next() {
+		var tableName string
+		err := db1.Scan(&tableName)
+		if err != nil {
+			fmt.Println("Error retrieving table name:", err)
+			continue
+		}
+		tableNames = append(tableNames, tableName)
+	}
+	if len(tableNames) == 0 || !Contains(tableNames, "todo") {
+		fmt.Println("No tables found. creating table Todo")
+		err = CreateTodoTable(db)
+		if err != nil {
+			fmt.Println("Failed to create TODO table:", err)
+			return nil, err
+		}
+	} else {
+		fmt.Println("Table Names:", tableNames)
+	}
+
+	fmt.Println("END###OF###LINE")
+
 	con = db
 	return db, nil
 }
